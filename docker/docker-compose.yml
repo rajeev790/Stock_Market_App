@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - '5000:5000'
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/stockmarket
+      - JWT_SECRET=your_jwt_secret
+    depends_on:
+      - mongo
+
+  client:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    ports:
+      - '3000:3000'
+    depends_on:
+      - server
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
